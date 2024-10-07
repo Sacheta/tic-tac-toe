@@ -7,12 +7,12 @@ class PlayBoard {
     vector<vector<char>> boardMatrix;
 
 public:
-    // Constructor
+    // Constructor to initialise the board
     PlayBoard(int dim) : dim(dim), boardMatrix(dim, vector<char>(dim, '_')) {
         cout << "******************* NEW GAME *******************" << endl;
     }
 
-    // Print the board
+    // function to print the board values
     void printBoard() const {
         for (const auto& row : boardMatrix) {
             for (char cell : row) {
@@ -22,7 +22,7 @@ public:
         }
     }
 
-    // Place a symbol on the board
+    // function to place the symbol during play
     bool playStep(int row, int col, char symbol) {
         if (isValidPosition(row, col)) {
             boardMatrix[row][col] = symbol;
@@ -31,7 +31,7 @@ public:
         return false;
     }
 
-    // Check if a player has won
+    // function to check if player with given symbol have won the game: -row-wise, col-wise or diagonal-wise
     bool checkWin(char symbol) const {
         // Check rows and columns
         for (int i = 0; i < dim; ++i) {
@@ -43,12 +43,12 @@ public:
         return checkDiagonals(symbol);
     }
 
-    // Check if the board is full (draw)
+    // function to check if board is full
     bool isBoardFull() const {
         for (const auto& row : boardMatrix) {
             for (char cell : row) {
                 if (cell == '_') {
-                    return false;  // If there's any empty spot, board is not full
+                    return false;
                 }
             }
         }
@@ -56,7 +56,7 @@ public:
     }
 
 private:
-    // Helper function to validate the position
+    // Helper function to validate the position: either out of bounds or already occupied
     bool isValidPosition(int row, int col) const {
         if (row < 0 || col < 0 || row >= dim || col >= dim) {
             cout << "PLEASE ENTER A VALID POSITION" << endl;
@@ -69,7 +69,7 @@ private:
         return true;
     }
 
-    // Check if the specified row is filled with the same symbol
+    // Check if the specified row is filled with the same symbol : row-wise won state
     bool checkRow(int row, char symbol) const {
         for (int col = 0; col < dim; ++col) {
             if (boardMatrix[row][col] != symbol) {
@@ -79,7 +79,7 @@ private:
         return true;
     }
 
-    // Check if the specified column is filled with the same symbol
+    // Check if the specified column is filled with the same symbol : col-wise won state
     bool checkColumn(int col, char symbol) const {
         for (int row = 0; row < dim; ++row) {
             if (boardMatrix[row][col] != symbol) {
@@ -89,7 +89,7 @@ private:
         return true;
     }
 
-    // Check both diagonals for a win condition
+    // Check both diagonals for a win condition : diagonal-wise won state
     bool checkDiagonals(char symbol) const {
         bool leftDiagonal = true, rightDiagonal = true;
         for (int i = 0; i < dim; ++i) {
@@ -108,19 +108,19 @@ class Player {
     string name;
 
 public:
-    // Constructor
+    // Constructor to assign name to the player
     Player(const string& name) : name(name) {
         cout << "Player " << name << " joined!" << endl;
     }
 
-    // Get the player's name
+    // function to get the player's name
     string getName() const {
         return name;
     }
 };
 
 int main() {
-    // Get board dimensions
+    // dimentions of the board
     int dim = 0;
     cout << "ENTER BOARD DIMENSIONS: ";
     cin >> dim;
@@ -128,20 +128,19 @@ int main() {
     PlayBoard board(dim);
     board.printBoard();
 
-    // Get player names
+    // getting the player details
     cout << "PLAYER 1 NAME: ";
-    string player1Name;
-    cin >> player1Name;
-    Player player1(player1Name);
+    string playerName;
+    cin >> playerName;
+    Player player1(playerName);
 
     cout << "PLAYER 2 NAME: ";
-    string player2Name;
-    cin >> player2Name;
-    Player player2(player2Name);
+    cin >> playerName;
+    Player player2(playerName);
     cout << endl;
 
-    char symbols[] = {'O', 'X'};
-    int currentPlayer = 0;
+    char symbols[] = {'O', 'X'}; //player symbols
+    int currentPlayer = 0; //player sysmbols index
 
     // Game loop
     while (true) {
@@ -149,7 +148,7 @@ int main() {
         Player currentPlayerPtr = (currentPlayer == 0) ? player1 : player2;
         char symbol = symbols[currentPlayer];
 
-        // Get input from current player
+        // getting input from current index (currentPlayer) player
         cout << "ENTER INPUT POSITION FOR " << currentPlayerPtr.getName() << " (" << symbol << "): ";
         cin >> row >> col;
         cout << endl;
@@ -158,13 +157,13 @@ int main() {
         if (board.playStep(row, col, symbol)) {
             board.printBoard();
 
-            // Check for win
+            // Check if already won
             if (board.checkWin(symbol)) {
                 cout << currentPlayerPtr.getName() << " WINS!" << endl;
                 break;
             }
 
-            // Check for draw
+            // Check for if there is a draw
             if (board.isBoardFull()) {
                 cout << "IT'S A DRAW!" << endl;
                 break;
