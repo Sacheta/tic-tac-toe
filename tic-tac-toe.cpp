@@ -146,11 +146,11 @@ int main() {
     // Game loop
     while (true) {
         int row, col;
-        Player* currentPlayerPtr = (currentPlayer == 0) ? &player1 : &player2;
+        Player currentPlayerPtr = (currentPlayer == 0) ? player1 : player2;
         char symbol = symbols[currentPlayer];
 
         // Get input from current player
-        cout << "ENTER INPUT POSITION FOR " << currentPlayerPtr->getName() << " (" << symbol << "): ";
+        cout << "ENTER INPUT POSITION FOR " << currentPlayerPtr.getName() << " (" << symbol << "): ";
         cin >> row >> col;
         cout << endl;
 
@@ -160,7 +160,7 @@ int main() {
 
             // Check for win
             if (board.checkWin(symbol)) {
-                cout << currentPlayerPtr->getName() << " WINS!" << endl;
+                cout << currentPlayerPtr.getName() << " WINS!" << endl;
                 break;
             }
 
@@ -171,7 +171,7 @@ int main() {
             }
 
             // Switch to the next player
-            currentPlayer = 1 - currentPlayer;
+            currentPlayer = (int)!currentPlayer;
         }
     }
 
